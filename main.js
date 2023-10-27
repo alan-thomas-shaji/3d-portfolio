@@ -1,7 +1,8 @@
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Reflector } from 'three/examples/jsm/objects/Reflector';
 
 
 // Setup
@@ -28,14 +29,15 @@ renderer.render(scene, camera);
 
 //ground
 
-const planeGeometry = new THREE.PlaneGeometry( 200, 100 );
-const Material = new THREE.MeshBasicMaterial( {color: 0x6d6f73, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( planeGeometry, Material );
-plane.rotation.x += Math.PI / 2;
-plane.position.y = 0;
-plane.receiveShadow = true;
-plane.shadowSide = THREE.FrontSide;
-scene.add( plane );
+// const planeGeometry = new THREE.PlaneGeometry( 200, 100 );
+// const Material = new THREE.MeshBasicMaterial( {color: 0x6d6f73, side: THREE.DoubleSide} );
+// const plane = new THREE.Mesh( planeGeometry, Material );
+// plane.rotation.x += Math.PI / 2;
+// plane.position.y = 0;
+// plane.position.x = 14;
+// plane.receiveShadow = true;
+// plane.shadowSide = THREE.FrontSide;
+// scene.add( plane );
 
 // Lights
 
@@ -50,8 +52,6 @@ pointLight.castShadow = true
 const pointLight1 = new THREE.PointLight(0xffffff);
 pointLight1.position.set(0, 2, 13);
 
-const ambientLight = new THREE.AmbientLight(0xffffff);
-ambientLight.castShadow = true;
 scene.add(pointLight, pointLight1);
 
 // Helpers
@@ -113,7 +113,7 @@ gltfloader.load('Jellyfish.gltf',(gltfscene) => {
 
 gltfloader.load('Psyche.gltf',(gltfscene) => {
   const psyche = gltfscene.scene;
-  psyche.position.set(-.8,0,14);
+  psyche.position.set(-.7,0,14);
   psyche.rotation.y +=-1.2;
   psyche.scale.set(.2, .2, .2);
   scene.add(psyche)
@@ -163,8 +163,19 @@ gltfloader.load('Cap low.gltf',(gltfscene) => {
 
 })
 
+const mirrorBack1 = new Reflector(
+  new THREE.PlaneGeometry(200, 100),
+  {
+      color: new THREE.Color(0x7f7f7f),
+      textureWidth: window.innerWidth * window.devicePixelRatio,
+      textureHeight: window.innerHeight * window.devicePixelRatio
+  }
+)
 
-
+mirrorBack1.position.y = -0.01
+mirrorBack1.rotation.x+= -Math.PI/2
+mirrorBack1.position.z = 1
+scene.add(mirrorBack1)
 
 
 
